@@ -124,3 +124,21 @@ if [[ $REMOVE_MALWARE == true ]]; then
     echo "Removing Netcat"
     apt-get purge netcat -y
 fi
+
+if [[ $INSTALL_PAM == true ]]; then
+    echo "Installing PAM"
+    apt-get install libpam-cracklib -y 
+
+    echo "Configuring PAM"
+    sed -i '1 s/^/password requisite pam_cracklib.so retry=3 minlen=8 difok=8 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1\n/' /etc/pam.d/common-password
+
+    echo "Configuring Login"
+    sed -i  '/^PASS_MAX_DAYS/ c\PASS_MAX_DAYS   90' /etc/login.defs
+    sed -i  '/^PASS_MAX_DAYS/ c\PASS_MIN_DAYS   10' /etc/login.defs
+    sed -i  '/^PASS_MAX_DAYS/ c\PASS_WARN_AGE   7' /etc/login.defs
+    sed -i  '/^FAILLOG_ENAB/ c\FAILLOG_ENAB YES' /etc/login.defs
+    sed -i  '/^LOG_UNKAIL_ENAB/ c\LOG_UNKAIL_ENAB YES' /etc/login.defs
+    sed -i  '/^SYSLOG-SU-ENAB/ c\SYSLOG-SU-ENAB YES' /etc/login.defs
+    sed -i  '/^SYSLOG-SG-ENAB/ c\SYSLOG-SG-ENAB YES' /etc/login.defs
+
+fi

@@ -127,6 +127,7 @@ if [[ $REMOVE_MALWARE == true ]]; then
     apt-get purge netcat -y
 fi
 
+
 if [[ $INSTALL_PAM == true ]]; then
     echo "Installing PAM"
     apt-get install libpam-cracklib -y 
@@ -144,6 +145,7 @@ if [[ $INSTALL_PAM == true ]]; then
     sed -i  's/^SYSLOG-SG-ENAB*/ c\SYSLOG-SG-ENAB YES/g' /etc/login.defs
 fi
 
+
 if [[ $USER_AUDIT == true ]]; then
     input="currentusers.txt"
     awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd >> currentusers.txt
@@ -160,4 +162,37 @@ if [[ $USER_AUDIT == true ]]; then
             echo "$line was not found (Consider Removing)" >> logs/user_log.txt
         fi
     done < "$input"
+fi
+
+
+if [[ $ACCOUNT_LOCKOUT == true ]]; then
+    echo "auth required pam_tally2.so deny=5 onerr=fail unlock_time=1800" >> /etc/pam.d/common-auth
+fi
+
+
+if [[ $ALLOW_GUEST == true ]]; then
+    echo "allow-guest=false" >> /etc/lightdm/lightdm.conf
+fi
+
+
+if[[ $CONFIGURE_SYSCTL == true ]]; then
+    #work in progress :)
+fi
+
+
+if [[ $LOCATE_MEDIA == true ]]; then
+    echo "---------------MEDIA FILES---------------" >> logs/media_log.txt
+    locate *.mkv *.webm *.flv *.vob *.ogv *.drc *.gifv *.mng *.avi$ *.mov *.qt *.wmv *.yuv *.rm *.rmvb *.asf *.amv *.mp4$ *.m4v *.mp *.m?v *.svi *.3gp *.flv *.f4v >> logs/media_log.txt
+    echo "---------------AUDIO FILES---------------" >> logs/media_log.txt
+    locate *.3ga *.aac *.aiff *.amr *.ape *.arf *.asf *.asx *.cda *.dvf *.flac *.gp4 *.gp5 *.gpx *.logic *.m4a *.m4b *.m4p *.midi *.mp3 *.pcm *.rec *.snd *.sng *.uax *.wav *.wma *.wpl *.zab >> logs/media_log.txt
+fi
+
+
+if [[ $LOG_CRON == true ]]; then
+    crontab -l >> /logs/cronjob_log.txt
+fi
+
+
+if [[ $LOG_NETSTAT == true ]]; then
+    ss -an4 > /logs/netstat_log.txt
 fi

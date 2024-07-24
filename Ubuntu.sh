@@ -5,16 +5,16 @@
 
 
 #Checks if config file exists
-if [ -! -e Ubuntu.conf ]; then
+if [ ! -r Ubuntu.conf ]; then
     echo "Config file does not exist. Please install config file before continuing."
     exit 1
 fi
 
 #Checks if user has root access
-if [[ $EUID -ne 0 ]]; then
-    echo "You must be root to run this script."
-    exit 1
-fi
+# if [[ $EUID -ne 0 ]]; then
+#     echo "You must be root to run this script."
+#     exit 1
+# fi
 
 
 #Imports Config File
@@ -133,12 +133,29 @@ if [[ $INSTALL_PAM == true ]]; then
     sed -i '1 s/^/password requisite pam_cracklib.so retry=3 minlen=8 difok=8 dcredit=-1 ucredit=-1 lcredit=-1 ocredit=-1\n/' /etc/pam.d/common-password
 
     echo "Configuring Login"
-    sed -i  '/^PASS_MAX_DAYS/ c\PASS_MAX_DAYS   90' /etc/login.defs
-    sed -i  '/^PASS_MAX_DAYS/ c\PASS_MIN_DAYS   10' /etc/login.defs
-    sed -i  '/^PASS_MAX_DAYS/ c\PASS_WARN_AGE   7' /etc/login.defs
-    sed -i  '/^FAILLOG_ENAB/ c\FAILLOG_ENAB YES' /etc/login.defs
-    sed -i  '/^LOG_UNKAIL_ENAB/ c\LOG_UNKAIL_ENAB YES' /etc/login.defs
-    sed -i  '/^SYSLOG-SU-ENAB/ c\SYSLOG-SU-ENAB YES' /etc/login.defs
-    sed -i  '/^SYSLOG-SG-ENAB/ c\SYSLOG-SG-ENAB YES' /etc/login.defs
+    sed -i  's/^PASS_MAX_DAYS*/ c\PASS_MAX_DAYS   90/g' /etc/login.defs
+    sed -i  's/^PASS_MAX_DAYS*/ c\PASS_MIN_DAYS   10/g' /etc/login.defs
+    sed -i  's/^PASS_MAX_DAYS*/ c\PASS_WARN_AGE   7/g' /etc/login.defs
+    sed -i  's/^FAILLOG_ENAB*/ c\FAILLOG_ENAB YES/g' /etc/login.defs
+    sed -i  's/^LOG_UNKAIL_ENAB*/ c\LOG_UNKAIL_ENAB YES/g' /etc/login.defs
+    sed -i  's/^SYSLOG-SU-ENAB*/ c\SYSLOG-SU-ENAB YES/g' /etc/login.defs
+    sed -i  's/^SYSLOG-SG-ENAB*/ c\SYSLOG-SG-ENAB YES/g' /etc/login.defs
+fi
 
+if [[ $USER_AUDIT == true ]]; then
+    input="currentusers.txt"
+    awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd >> currentusers.txt
+    while IFS= read -r line; do
+        if grep -q "$line" "users.txt"; then
+
+            #NEEDS TESTING TO CHECK IF USER IS ADMIN
+            if sudo -l -U "$line" | grep -q "(ALL) ALL"; then
+                echo "$line is found and is an admin" >> logs/user_log.txt
+            else
+                echo "$line is found but not an admin" >> logs/user_log.txt
+            fi
+        else
+            echo "$line was not found (Consider Removing)" >> logs/user_log.txt
+        fi
+    done < "$input"
 fi

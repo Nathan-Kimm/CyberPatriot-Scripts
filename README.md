@@ -26,5 +26,14 @@ chmod +x Ubuntu.conf
 
 </details>
 
+<details>
+<summary><strong>User Auditing</strong></summary>
+<br>
+
+* Users listed on the README should be inputted into users.txt
+* When script is run, users on the system will be put into currentusers.txt and users that are not found will be printed in user_log.txt
+
+</details>
+
 > [!NOTE]
 > Make sure to configure the config file and read the README for the competition before running script

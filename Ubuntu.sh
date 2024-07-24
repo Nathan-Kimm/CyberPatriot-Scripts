@@ -45,7 +45,9 @@ if [[ $AUTOMATIC_UPDATES == true ]]; then
     apt install unattended-upgrades -y
 
     echo "Configuring Unattended Upgrades"
-    sed -i "s/"
+    sed -i '/"${distro-id}:${distro_codename}";/s/^#/g' /etc/apt/apt.conf.d/50unattented-upgrades
+    sed -i '/"${distro-id}:${distro_codename}-security";/s/^#/g' /etc/apt/apt.conf.d/50unattented-upgrades
+    
 
     echo "Enabling Automatic Updates"
     sed -i "s/APT::PERIODIC::Update-Package-Lists \"0\"/APT::PERIODIC::Update-Package-Lists \"1\"/g" /etc/apt/apt.conf.d/20auto-upgrades

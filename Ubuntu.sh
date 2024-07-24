@@ -147,10 +147,10 @@ fi
 
 
 if [[ $USER_AUDIT == true ]]; then
-    input="currentusers.txt"
-    awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd >> currentusers.txt
+    input="users/currentusers.txt"
+    awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd >> users/currentusers.txt
     while IFS= read -r line; do
-        if grep -q "$line" "users.txt"; then
+        if grep -q "$line" "users/users.txt"; then
 
             #NEEDS TESTING TO CHECK IF USER IS ADMIN
             if sudo -l -U "$line" | grep -q "(ALL) ALL"; then

@@ -10,11 +10,11 @@ if [ ! -r Ubuntu.conf ]; then
     exit 1
 fi
 
-#Checks if user has root access
-# if [[ $EUID -ne 0 ]]; then
-#     echo "You must be root to run this script."
-#     exit 1
-# fi
+# Checks if user has root access
+if [[ $EUID -ne 0 ]]; then
+    echo "You must be root to run this script."
+    exit 1
+fi
 
 
 #Imports Config File
@@ -171,11 +171,14 @@ fi
 
 
 if [[ $ALLOW_GUEST == true ]]; then
+    apt update
+    apt install lightdm
     echo "allow-guest=false" >> /etc/lightdm/lightdm.conf
 fi
 
 
-if[[ $CONFIGURE_SYSCTL == true ]]; then
+if [[ $CONFIGURE_SYSCTL == true ]]; then
+    echo "Configuring SYSCTL"
     #work in progress :)
 fi
 

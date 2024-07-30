@@ -91,18 +91,6 @@ if [[ $INSTALL_SSH_SERVER == true ]]; then
 fi
 
 
-#REVIEW THIS CODE
-if [[ $CHANGE_PASSWORD == true ]]; then 
-    #CHANGE PASSWORD
-    new_password="Cyb3rPatr!0t$"
-    users=$(cat /etc/passwd | cut -d ":" -f1)
-    for users in $users; do
-        usermod --password $(echo $new_password | openssl passwd -1 -stdin) $user
-        echo "Changed password for user $user"
-    done
-fi
-
-
 if [[ $INSTALL_CLAM == true ]]; then 
     echo "Installing Clam Antivirus"
     apt-get install clamav -y
@@ -184,12 +172,12 @@ if [[ $CONFIGURE_SYSCTL == true ]]; then
     #work in progress :)
 fi
 
-
+#Might want to change media types. Takes long to locate all.
 if [[ $LOCATE_MEDIA == true ]]; then
-    echo "---------------MEDIA FILES---------------" >> logs/media_log.txt
-    locate *.mkv *.webm *.flv *.vob *.ogv *.drc *.gifv *.mng *.avi$ *.mov *.qt *.wmv *.yuv *.rm *.rmvb *.asf *.amv *.mp4$ *.m4v *.mp *.m?v *.svi *.3gp *.flv *.f4v >> logs/media_log.txt
+    echo "---------------MEDIA FILES---------------" > logs/media_log.txt
+    ( for i in "*.jpg" "*.mp4" "*.mp6" "*.mp3" "*.mov" "*.png" "*.jpeg" "*.gif" "*.zip" "*.wav" "*.tif" "*.wmv" "*.avi" "*.mpeg" "*.tiff" "*.tar"; do find /home -name $i >> logs/media_log.txt; done; echo "" >> logs/media_log.txt ; ) &
     echo "---------------AUDIO FILES---------------" >> logs/media_log.txt
-    locate *.3ga *.aac *.aiff *.amr *.ape *.arf *.asf *.asx *.cda *.dvf *.flac *.gp4 *.gp5 *.gpx *.logic *.m4a *.m4b *.m4p *.midi *.mp3 *.pcm *.rec *.snd *.sng *.uax *.wav *.wma *.wpl *.zab >> logs/media_log.txt
+    ( for i in "*.jpg" "*.mp4" "*.mp6" "*.mp3" "*.mov" "*.png" "*.jpeg" "*.gif" "*.wav" "*.tif" "*.tiff" "*.wmv" "*.avi" "*.mpeg"; do find / -name $i >> logs/media_log.txt; done; echo "" >> logs/media_log.txt ; echo "Done looking for bad media files" ) &
 fi
 
 

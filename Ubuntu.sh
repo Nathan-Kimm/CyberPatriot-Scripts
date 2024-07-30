@@ -3,6 +3,8 @@
 #-y auto confirms without prompting user
 #https://devhints.io/bash
 
+#Recommended Password: Cyb3rPatr!0t$
+
 
 #Checks if config file exists
 if [ ! -r Ubuntu.conf ]; then

@@ -10,7 +10,7 @@ This bash script automates the common vulnerabilities found within the Linux por
 ```
 git clone https://github.com/Nathan-Kimm/CyberPatriot-Scripts.git
 ```
-3. Navigate to the directory where the script was cloned
+2. Navigate to the directory where the script was cloned
 ```
 cd /path/tofile/CyberPatriot-Scripts
 ```

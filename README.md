@@ -40,10 +40,9 @@ chmod +x Ubuntu.conf
 <summary><strong>Windows Installation</strong></summary>
 <br>
 
+## Windows Script is very basic and needs work
 1. After downloading, run the script in admin
 
-> [!NOTE]
-> Windows Script is very basic and needs some work
 
 </details>
 

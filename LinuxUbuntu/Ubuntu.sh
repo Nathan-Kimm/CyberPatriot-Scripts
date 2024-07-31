@@ -177,15 +177,15 @@ if [[ $LOCATE_MEDIA == true ]]; then
     echo "---------------MEDIA FILES---------------" > logs/media_log.txt
     ( for i in "*.jpg" "*.mp4" "*.mp6" "*.mp3" "*.mov" "*.png" "*.jpeg" "*.gif" "*.zip" "*.wav" "*.tif" "*.wmv" "*.avi" "*.mpeg" "*.tiff" "*.tar"; do find /home -name $i >> logs/media_log.txt; done; echo "" >> logs/media_log.txt ; ) &
     echo "---------------AUDIO FILES---------------" >> logs/media_log.txt
-    ( for i in "*.jpg" "*.mp4" "*.mp6" "*.mp3" "*.mov" "*.png" "*.jpeg" "*.gif" "*.wav" "*.tif" "*.tiff" "*.wmv" "*.avi" "*.mpeg"; do find / -name $i >> logs/media_log.txt; done; echo "" >> logs/media_log.txt ; echo "Done looking for bad media files" ) &
+    ( for i in "*.jpg" "*.mp4" "*.mp6" "*.mp3" "*.mov" "*.png" "*.jpeg" "*.gif" "*.wav" "*.tif" "*.tiff" "*.wmv" "*.avi" "*.mpeg"; do find / -name $i >> logs/media_log.txt; done; echo "" >> logs/media_log.txt ; ) &
 fi
 
 
 if [[ $LOG_CRON == true ]]; then
-    crontab -l >> /logs/cronjob_log.txt
+    crontab -l >> logs/cronjob_log.txt
 fi
 
 
 if [[ $LOG_NETSTAT == true ]]; then
-    ss -an4 > /logs/netstat_log.txt
+    ss -an4 > logs/netstat_log.txt
 fi

@@ -115,6 +115,10 @@ if [[ $REMOVE_MALWARE == true ]]; then
 
     echo "Removing Netcat"
     apt-get purge netcat -y
+    
+    echo "Removing AisleRiot"
+    apt remove aisleriot -y
+    apt autoremove -y
 fi
 
 

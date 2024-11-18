@@ -118,6 +118,16 @@ if [[ $REMOVE_MALWARE == true ]]; then
     
     echo "Removing AisleRiot"
     apt remove aisleriot -y
+
+    echo "Removing Wire Shark"
+    apt remove wireshark -y
+
+    echo "Removing Ophcrack"
+    apt remove ophcrack -y
+
+    echo "Removing nmap"
+    apt remove nmap -y
+
     apt autoremove -y
 fi
 
@@ -173,9 +183,22 @@ fi
 
 if [[ $CONFIGURE_SYSCTL == true ]]; then
     echo "Configuring SYSCTL"
-    #work in progress :)
-fi
+    sudo sysctl -w net.ipv4.tcp_syncookies=1
+    sudo sysctl -w net.ipv4.ip_forward=0
+    sudo sysctl -w net.ipv4.conf.all.send_redirects=0
+    sudo sysctl -w net.ipv4.conf.default.send_redirects=0
+    sudo sysctl -w net.ipv4.conf.all.accept_redirects=0
+    sudo sysctl -w net.ipv4.conf.default.accept_redirects=0
+    sudo sysctl -w net.ipv4.conf.all.secure_redirects=0
+    sudo sysctl -w net.ipv4.conf.default.secure_redirects=0
+    sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+    sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+    sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 
+    sudo sysctl -p
+
+fi
+-==---
 #Might want to change media types. Takes long to locate all.
 if [[ $LOCATE_MEDIA == true ]]; then
     echo "---------------MEDIA FILES---------------" > logs/media_log.txt
@@ -192,4 +215,22 @@ fi
 
 if [[ $LOG_NETSTAT == true ]]; then
     ss -an4 > logs/netstat_log.txt
+fi
+
+if [[ $SECURE_FILES == true ]]; then
+   sudo chmod 644 /etc/passwd
+   sudo chmod 640 /etc/shadow
+   sudo chmod 644 /etc/group
+   sudo chmod 640 /etc/gshadow
+   sudo chmod 440 /etc/sudoers
+   sudo chmod 644 /etc/ssh/sshd_config
+   sudo chmod 644 /etc/fstab
+   sudo chmod 600 /boot/grub/grub.cfg
+   sudo chmod 644 /etc/hostname
+   sudo chmod 644 /etc/hosts
+   sudo chmod 600 /etc/crypttab
+   sudo chmod 640 /var/log/auth.log
+   sudo chmod 644 /etc/apt/sources.list
+   sudo chmod 644 /etc/systemd/system/*.service
+   sudo chmod 644 /etc/resolv.conf
 fi

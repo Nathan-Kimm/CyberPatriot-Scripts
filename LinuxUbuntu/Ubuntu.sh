@@ -105,28 +105,28 @@ fi
 
 if [[ $REMOVE_MALWARE == true ]]; then
     echo "Removing Hydra"
-    apt-get purge hydra -y
+    apt-get purge hydra* -y
 
     echo "Removing John the Ripper"
-    apt-get purge john -y
+    apt-get purge john* -y
 
     echo "Removing Nikto"
-    apt-get purge nikto -y
+    apt-get purge nikto* -y
 
     echo "Removing Netcat"
-    apt-get purge netcat -y
+    apt-get purge netcat* -y
     
     echo "Removing AisleRiot"
-    apt remove aisleriot -y
+    apt remove aisleriot* -y
 
     echo "Removing Wire Shark"
-    apt remove wireshark -y
+    apt remove wireshark* -y
 
     echo "Removing Ophcrack"
-    apt remove ophcrack -y
+    apt remove ophcrack* -y
 
     echo "Removing nmap"
-    apt remove nmap -y
+    apt remove nmap* -y
 
     apt autoremove -y
 fi
